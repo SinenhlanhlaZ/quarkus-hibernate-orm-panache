@@ -8,6 +8,8 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+
 @Path("/movies")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -27,7 +29,7 @@ public class Movies {
     public Response getById(@PathParam("id") Long id) {
         return movieRepository.findByIdOptional(id)
                 .map(movie -> Response.ok(movies).build())
-                .orElse(Response.status(Response.Status.NOT_FOUND)
+                .orElse(Response.status(NOT_FOUND)
                         .build());
     }
 
@@ -37,7 +39,7 @@ public class Movies {
         return movieRepository.find("title", title)
                 .singleResultOptional()
                 .map(movie -> Response.ok(movie).build())
-                .orElse(Response.status(Response.Status.NOT_FOUND)
+                .orElse(Response.status(NOT_FOUND)
                         .build());
     }
 
@@ -64,65 +66,13 @@ public class Movies {
     @Transactional
     public Response deleteById(@PathParam("id") Long id) {
         boolean deleted =  movieRepository.deleteById(id);
-        return deleted ? Response.noContent().build() : Response.status(Response.Status.NOT_FOUND);
+        if(deleted == true)
+        {
+            return Response.noContent().build();
+        }
+        else
+        {
+            return Response.status(NOT_FOUND).build();
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
