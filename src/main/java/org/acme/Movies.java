@@ -28,7 +28,7 @@ public class Movies {
     @Path("{id}")
     public Response getById(@PathParam("id") Long id) {
         return movieRepository.findByIdOptional(id)
-                .map(movie -> Response.ok(movies).build())
+                .map(movie -> Response.ok(movie).build())
                 .orElse(Response.status(NOT_FOUND)
                         .build());
     }
@@ -66,7 +66,7 @@ public class Movies {
     @Transactional
     public Response deleteById(@PathParam("id") Long id) {
         boolean deleted =  movieRepository.deleteById(id);
-        if(deleted == true)
+        if(deleted)
         {
             return Response.noContent().build();
         }
@@ -76,3 +76,6 @@ public class Movies {
         }
     }
 }
+
+//    docker run --name my_db -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -
+//        e POSTGRES_DB=my_db -p 5432:5432 postgres:10.5
